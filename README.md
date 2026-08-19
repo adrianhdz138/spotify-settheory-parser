@@ -6,7 +6,11 @@
 Escribe el id de la playlist igual a una operación de conjuntos con las playlists
 Ejemplo: <playlist_id> = <operación>
 > abcdefghIJKLMN01234567 = 4567890qwerTYUIopASDFg inter uUikbUYIIYyH778G877Ggh
+
+> 4567890qwerTYUIopASDFg = (uUikbUYIIYyH778G877Ggh union abcdefghIJKLMN01234567) inter (7t7TV7t7t6YH89UI9i8787 union 78GVFChgfhgYUY43767hj4)
 ```
+
+Operadores disponibles: inter, &, union, |, menos, -, \\, symdiff, ^
 
 ## Contenido de `.env`
 
