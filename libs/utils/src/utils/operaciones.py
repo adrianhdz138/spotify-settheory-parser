@@ -1,9 +1,9 @@
 # Diccionario para traducir palabras a operadores de Python
 operadores = {
     "inter": "&",           # Intersección
-    "&": "&",               # Intersección
+    "&": "&",               # Intersección (símbolo)
     "union": "|",           # Unión
-    "|": "|",               # Unión
+    "|": "|",               # Unión (símbolo)
     "menos": "-",           # Diferencia
     "-": "-",               # Diferencia (símbolo)
     "\\": "-",              # Diferencia (símbolo alternativo)

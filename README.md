@@ -12,6 +12,8 @@ Ejemplo: <playlist_id> = <operación>
 
 Operadores disponibles: inter, &, union, |, menos, -, \\, symdiff, ^
 
+> Asegúrate de vaciar la playlist objetivo antes de realizar el cálculo
+
 ## Contenido de `.env`
 
 ```bash
