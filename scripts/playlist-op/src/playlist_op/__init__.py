@@ -39,10 +39,10 @@ def mapas_sets_y_nombres(pl_ids: Iterable[PlaylistId]) -> tuple[dict[PlaylistId,
         if "name,items(" in str(respuesta_items["next"]):
             arreglar_next_url(respuesta_items)
 
-            print(f"Coleccionando más canciones de {mapa_nombres[pl_id]}", end=".")
+            print(f"Coleccionando más canciones de {mapa_nombres[pl_id]}", end=".", flush=True)
 
         while respuesta_items["next"]:
-            print(".", end="")
+            print(".", end="", flush=True)
             respuesta_items: RespuestaSP = sp.next(respuesta_items)
             # En el next url de get_playlist, el endpoint cambia a /playlists/{playlist_id}/items
             items.extend(respuesta_items["items"])
