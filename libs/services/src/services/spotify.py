@@ -7,7 +7,6 @@ load_dotenv()
 spotify = Spotify(
     auth_manager=SpotifyOAuth(
         scope = [
-            'user-library-read',
             'playlist-read-private',
             'playlist-modify-private',
         ],
