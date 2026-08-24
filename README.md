@@ -10,9 +10,9 @@ Ejemplo: <playlist_id> = <operación>
 > 4567890qwerTYUIopASDFg = (uUikbUYIIYyH778G877Ggh union abcdefghIJKLMN01234567) inter (7t7TV7t7t6YH89UI9i8787 union 78GVFChgfhgYUY43767hj4)
 ```
 
-Operadores disponibles: inter, &, union, |, menos, -, \\, symdiff, ^
+Operadores disponibles: `inter, &, union, |, menos, -, \, symdiff, ^`
 
-> Asegúrate de vaciar la playlist objetivo antes de realizar el cálculo
+> :warning: Se reemplazará todo el contenido existente de la playlist, incluida la descripción de ésta
 
 ## Contenido de `.env`
 

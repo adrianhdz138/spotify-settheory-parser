@@ -8,13 +8,12 @@ from services.spotify import spotify as sp
 from utils.operaciones import resolver_operación
 
 
-def arreglar_next_url(get_playlist_respuesta: RespuestaSP) -> None:
+def arreglar_next_url(get_playlist_respuesta: RespuestaSP, campos_nuevo: bytes) -> None:
     # Corrección de error debido a que en el next url el endpoint cambia pero no los campos
     next_url_query_params_str = urlparse(get_playlist_respuesta["next"]).query
-    next_url_query_params = parse_qs(next_url_query_params_str)
     next_url_stem = get_playlist_respuesta["next"].removesuffix(f"?{next_url_query_params_str}")
-    next_url_fields = next_url_query_params["fields"][0]
-    next_url_query_params["fields"] = [next_url_fields.removeprefix("name,items(").removesuffix(")")]
+    next_url_query_params = parse_qs(next_url_query_params_str)
+    next_url_query_params["fields"] = [campos_nuevo]
     get_playlist_respuesta["next"] = f"{next_url_stem}?{unquote(urlencode(next_url_query_params, doseq=True))}"
 
 
@@ -23,7 +22,9 @@ def mapas_sets_y_nombres(pl_ids: Iterable[PlaylistId]) -> tuple[dict[PlaylistId,
     mapa_nombres: dict[PlaylistId, str] = {}
 
     for pl_id in pl_ids:
-        campos = "name,items(next,items(is_local,item.uri))"
+        campos_interno = "next,items(is_local,item.uri)"
+
+        campos = f"name,items({campos_interno})"
 
         print(f"Petición a playlist {pl_id}...")
         respuesta: RespuestaDetalles = sp.playlist(pl_id, fields=campos, market='MX')
@@ -36,8 +37,8 @@ def mapas_sets_y_nombres(pl_ids: Iterable[PlaylistId]) -> tuple[dict[PlaylistId,
 
         items = respuesta["items"]["items"]
 
-        if "name,items(" in str(respuesta_items["next"]):
-            arreglar_next_url(respuesta_items)
+        if campos in str(respuesta_items["next"]):
+            arreglar_next_url(respuesta_items, bytes(campos_interno, encoding="UTF-8"))
 
             print(f"Coleccionando más canciones de {mapa_nombres[pl_id]}", end=".", flush=True)
 
@@ -69,19 +70,29 @@ def main():
     print()
 
     pl_id_target: PlaylistId
-    operación: str
     pl_id_target, operación = expresión.split("=")
     pl_id_target = pl_id_target.strip()
     operación = operación.strip()
 
-    print(f"Comprobando vaciedad de playlist {pl_id_target}...")
+    print(f"Petición a playlist objetivo: {pl_id_target}", end=".", flush=True)
 
-    respuesta_pl_target: RespuestaSP = sp.playlist_items(pl_id_target, market='MX')
+    respuesta_pl_target: RespuestaSP = sp.playlist_items(pl_id_target, fields="next,items(is_local,item.uri)", market='MX')
 
-    if respuesta_pl_target["items"]:
-        raise SystemExit("La Playlist objetivo no está vacía, asegúrate de vaciarla para poder agregar las canciones")
+    pl_target_items = respuesta_pl_target["items"]
 
-    print("Playlist vacía, continuando...")
+    while respuesta_pl_target["next"]:
+        print(".", end="", flush=True)
+        
+        respuesta_pl_target = sp.next(respuesta_pl_target)
+        pl_target_items.extend(respuesta_pl_target["items"])
+
+    print()
+
+    pl_target_items_set = {
+        item["item"]["uri"]
+        for item in pl_target_items
+        if not item["is_local"]
+    }
 
     conjuntos: set[PlaylistId] = set(re.findall(r"[a-zA-Z0-9]{22}", operación))
 
@@ -103,6 +114,11 @@ def main():
     for items in batched(resultado_operación, 100):
         print(f"Agregando {len(items)} canciones a playlist {pl_id_target}...")
         sp.playlist_add_items(pl_id_target, items)
+
+    if items_eliminar := pl_target_items_set - resultado_operación:
+        for items in batched(items_eliminar, 100):
+            print(f"Limpiando {len(items)} canciones anteriores de {pl_id_target}...")
+            sp.playlist_remove_all_occurrences_of_items(pl_id_target, items)
 
     print(f"Escribiendo operación calculada en la descripción de la playlist: {pl_id_target}...")
 
