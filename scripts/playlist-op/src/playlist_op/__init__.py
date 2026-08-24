@@ -3,7 +3,13 @@ from collections.abc import Iterable
 from itertools import batched
 from urllib.parse import parse_qs, unquote, urlencode, urlparse
 
-from core.tipos import CanciónUri, PlaylistId, RespuestaDetalles, RespuestaSP, PlaylistTrackObject
+from core.tipos import (
+    CanciónUri,
+    PlaylistId,
+    PlaylistTrackObject,
+    RespuestaDetalles,
+    RespuestaSP,
+)
 from services.spotify import spotify as sp
 from utils.operaciones import resolver_operación
 
