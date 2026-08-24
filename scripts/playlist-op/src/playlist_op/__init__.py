@@ -111,9 +111,10 @@ def main():
 
     resultado_operación = resolver_operación(operación, mapa_sets)
 
-    for items in batched(resultado_operación, 100):
-        print(f"Agregando {len(items)} canciones a playlist {pl_id_target}...")
-        sp.playlist_add_items(pl_id_target, items)
+    if items_agregar := resultado_operación - pl_target_items_set:
+        for items in batched(items_agregar, 100):
+            print(f"Agregando {len(items)} canciones a playlist {pl_id_target}...")
+            sp.playlist_add_items(pl_id_target, items)
 
     if items_eliminar := pl_target_items_set - resultado_operación:
         for items in batched(items_eliminar, 100):
