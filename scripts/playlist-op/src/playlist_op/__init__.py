@@ -98,16 +98,9 @@ def reemplazar_items(id_target: PlaylistId, set_target: set[CanciónUri], set_re
             sp.playlist_remove_all_occurrences_of_items(id_target, items)
 
 
-def main():
-    print("Escribe el id de la playlist igual a una operación de conjuntos con las playlists")
-    print("Ejemplo: <playlist_id> = <operación>")
-
-    expresión = input("> ")
-
-    print()
-
+def calcular_expresión(exp: str) -> None:
     pl_id_target: PlaylistId
-    pl_id_target, operación = expresión.split("=")
+    pl_id_target, operación = exp.split("=")
     pl_id_target = pl_id_target.strip()
     operación = operación.strip()
 
@@ -141,6 +134,17 @@ def main():
     print(f"Escribiendo operación calculada en la descripción de la playlist objetivo: {pl_id_target}...")
 
     sp.playlist_change_details(pl_id_target, description=pl_target_descripción)
+
+
+def main():
+    print("Escribe el id de la playlist igual a una operación de conjuntos con las playlists")
+    print("Ejemplo: <playlist_id> = <operación>")
+
+    expresión = input("> ")
+
+    print()
+
+    calcular_expresión(expresión)
 
     print("Fin.")
 
