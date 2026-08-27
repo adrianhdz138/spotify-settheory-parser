@@ -64,7 +64,7 @@ def mapas_sets_y_nombres(pl_ids: Iterable[PlaylistId]) -> tuple[
         campos = f"name,items({campos_interno})"
 
         print(f"Petición a playlist {pl_id}...")
-        respuesta: RespuestaDetalles = sp.playlist(pl_id, fields=campos, market='MX')
+        respuesta: RespuestaDetalles = sp.playlist(pl_id, fields=campos)
 
         mapa_nombres[pl_id] = respuesta["name"]
 
@@ -106,7 +106,7 @@ def calcular_expresión(exp: str) -> None:
 
     print(f"Petición a playlist objetivo: {pl_id_target}...")
 
-    respuesta_pl_target: RespuestaSP = sp.playlist_items(pl_id_target, fields="next,items(is_local,item.uri)", market='MX')
+    respuesta_pl_target: RespuestaSP = sp.playlist_items(pl_id_target, fields="next,items(is_local,item.uri)")
 
     pl_target_items = obtener_items(respuesta_pl_target, pl_id_target)
 
