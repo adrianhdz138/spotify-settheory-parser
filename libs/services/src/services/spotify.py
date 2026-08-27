@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
+from os import getenv
+
 load_dotenv()
 
 spotify = Spotify(
@@ -10,5 +12,6 @@ spotify = Spotify(
             'playlist-read-private',
             'playlist-modify-private',
         ],
-    )
+    ),
+    language=getenv("SPOTIPY_ACCEPT_LANGUAGE", None)
 )
