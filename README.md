@@ -20,5 +20,4 @@ Operadores disponibles: `inter, &, union, |, menos, -, \, symdiff, ^`
 SPOTIPY_CLIENT_ID='0a1b2c3d4e5f6g7h8i9j10k11l12m13n'
 SPOTIPY_CLIENT_SECRET='asd9877sdf09as9d709a8sdf098asd09'
 SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080/callback'
-SPOTIPY_ACCEPT_LANGUAGE='es'  # (Opcional) es-MX, en-US, en, ...
 ```
